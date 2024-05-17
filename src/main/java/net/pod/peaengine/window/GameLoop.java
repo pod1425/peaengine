@@ -4,35 +4,46 @@ import net.pod.peaengine.Engine;
 import org.lwjgl.opengl.GL11;
 
 public class GameLoop {
-    private static Runnable updatePipeline;
-    private static Runnable renderPipeline;
-    private static double interval = 1_000_000_000.0 / Engine.tps;
-    private static double delta = 0;
-    private static long lastTime;
-    private static long currentTime;
-    private static boolean initialized = false;
-    public static void init(Runnable updatePipeline, Runnable renderPipeline) {
-        GameLoop.updatePipeline = updatePipeline;
-        GameLoop.renderPipeline = renderPipeline;
-        lastTime = System.nanoTime();
-        initialized = true;
+
+    private static GameLoopExecutor executor = null;
+
+    public static void launch(Runnable updatePipeline, Runnable renderPipeline) {
+        executor = new GameLoopExecutor(updatePipeline, renderPipeline);
+        executor.start();
     }
 
-    public static void tick() {
-        if (!initialized) {
-            return;
-        }
-        currentTime = System.nanoTime();
-        delta += (currentTime - lastTime) / interval;
-        lastTime = currentTime;
+    private static class GameLoopExecutor extends Thread {
+        private Runnable updatePipeline;
+        private Runnable renderPipeline;
+        private double interval = 1_000_000_000.0 / Engine.tps;
+        private double delta = 0;
+        private long lastTime;
+        private long currentTime;
 
-        while (delta >= 1) {
+        public GameLoopExecutor(Runnable updatePipeline, Runnable renderPipeline) {
+            this.updatePipeline = updatePipeline;
+            this.renderPipeline = renderPipeline;
+            lastTime = System.nanoTime();
+        }
+
+        @Override
+        public void run() {
+            while (Engine.shouldRun) {
+                currentTime = System.nanoTime();
+                delta += (currentTime - lastTime) / interval;
+                lastTime = currentTime;
+                while (delta >= 1) {
+                    tick();
+                    delta--;
+                }
+            }
+        }
+
+        public void tick() {
             updatePipeline.run();
-            delta--;
-        }
+            // TODO: implement FPS capping
+            renderPipeline.run();
 
-        // TODO: implement FPS capping
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-        renderPipeline.run();
+        }
     }
 }
