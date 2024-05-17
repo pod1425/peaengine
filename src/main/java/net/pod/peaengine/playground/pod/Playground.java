@@ -5,7 +5,7 @@ import net.pod.peaengine.window.GameLoop;
 import net.pod.peaengine.window.Window;
 
 public class Playground {
-    // webhook test
+
     public static void main(String[] args) throws InterruptedException {
         Engine.init();
         Engine.initializeNewMainWindow("Hello", 800, 600);
