@@ -8,6 +8,7 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Engine {
     public static int framerateCap;
@@ -57,5 +58,13 @@ public class Engine {
             w.close();
         }
     }
-    //TODO: implement closing of single window by id
+
+    /**
+     * Closes a window by id
+     * @param id window id
+     * @throws NullPointerException if window with that {@code id} is {@code null}
+     */
+    public static void closeWindow(long id) {
+        Objects.requireNonNull(windows.get(id), "Window with ID: " + id + " does not exist!").close();
+    }
 }
