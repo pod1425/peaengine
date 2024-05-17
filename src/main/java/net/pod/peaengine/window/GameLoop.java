@@ -10,6 +10,8 @@ public class GameLoop {
     public static void launch(Runnable updatePipeline, Runnable renderPipeline) {
         executor = new GameLoopExecutor(updatePipeline, renderPipeline);
         executor.start();
+        // maybe probably? gotta research
+        //executor.setDaemon(true);
     }
 
     private static class GameLoopExecutor extends Thread {

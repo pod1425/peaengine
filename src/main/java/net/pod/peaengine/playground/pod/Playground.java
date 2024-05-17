@@ -24,7 +24,7 @@ public class Playground {
         );
 
         Thread.sleep(5000); // wait 5 seconds before closing the game
-        Engine.shouldRun = false;
         Engine.closeAllWindows();
+        Engine.dispose();
     }
 }
