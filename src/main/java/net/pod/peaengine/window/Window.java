@@ -18,8 +18,6 @@ public class Window implements AutoCloseable {
     private String title;
     private int width;
     private int height;
-    private Runnable updatePipeline;
-    private Runnable renderPipeline;
 
     public Window(String title, int width, int height) {
         this.title = title;
@@ -32,28 +30,27 @@ public class Window implements AutoCloseable {
         return window;
     }
 
-    public void launchGameLoop(Runnable updatePipeline, Runnable renderPipeline) {
-        this.updatePipeline = updatePipeline;
-        this.renderPipeline = renderPipeline;
-        loop();
-    }
-
     private void loop() {
-        GL.createCapabilities();
-        GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
 
         // Run the rendering loop until the user has attempted to close the window or has pressed the ESCAPE key.
         while (!GLFW.glfwWindowShouldClose(window)) {
             //TODO: outsource this all to GameLoop class
 
-            GLFW.glfwSwapBuffers(window);
 
-            GLFW.glfwPollEvents();
         }
     }
 
+    // TODO: replace this placeholder when event system is in place
+    public void renderCalled() {
+        GLFW.glfwSwapBuffers(window);
+        GLFW.glfwPollEvents();
+    }
+
+    /**
+     * Initializes current window
+     */
     private void init() {
-        Engine.init();
 
         GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE); // hidden
         GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GLFW.GLFW_FALSE); // non-resizable (for now)
@@ -87,6 +84,10 @@ public class Window implements AutoCloseable {
 
         GLFW.glfwMakeContextCurrent(window);
         GLFW.glfwSwapInterval(1); // v-sync
+
+        GL.createCapabilities();
+        GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
     }
 
     public void show() {

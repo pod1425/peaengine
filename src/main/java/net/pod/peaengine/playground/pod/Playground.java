@@ -1,14 +1,11 @@
-package net.pod.peaengine.example;
+package net.pod.peaengine.playground.pod;
 
 import net.pod.peaengine.Engine;
 import net.pod.peaengine.window.GameLoop;
 import net.pod.peaengine.window.Window;
-import org.lwjgl.opengl.GL11;
 
 public class Playground {
-    /*
-
-     */
+    // webhook test
     public static void main(String[] args) throws InterruptedException {
         Engine.init();
         Engine.initializeNewMainWindow("Hello", 800, 600);
@@ -25,16 +22,9 @@ public class Playground {
                     mainWindow.renderCalled();
                 }
         );
-        Thread th = new Thread(() -> {
-            try {
-                Thread.sleep(5000); // wait 5 seconds before closing the game
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            Engine.shouldRun = false;
-            Engine.closeAllWindows();
-        });
-        th.start();
 
+        Thread.sleep(5000); // wait 5 seconds before closing the game
+        Engine.shouldRun = false;
+        Engine.closeAllWindows();
     }
 }

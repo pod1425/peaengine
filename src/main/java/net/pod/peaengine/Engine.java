@@ -13,7 +13,7 @@ public class Engine {
     public static int tps = 20;
     private static Map<Long, Window> windows; // no, not the OS
     public static long mainWindowId;
-    private static GameLoop gameLoop;
+    public static boolean shouldRun;
 
     public static void init() {
         windows = new HashMap<>();
@@ -22,6 +22,7 @@ public class Engine {
         if (!GLFW.glfwInit()) {
             throw new IllegalStateException("Unable to initialize GLFW");
         }
+        shouldRun = true;
     }
 
     public static long initializeNewMainWindow(String title, int width, int height) {
@@ -32,12 +33,12 @@ public class Engine {
         return mainWindowId;
     }
     //TODO: implement creation of other windows
-    public void launchGameLoop(Runnable updatePipeline, Runnable renderPipeline) {
-        GameLoop.init(updatePipeline, renderPipeline);
-        //window.launchGameLoop(updatePipeline, renderPipeline);
+    public static void launchGameLoop(Runnable updatePipeline, Runnable renderPipeline) {
+        GameLoop.launch(updatePipeline, renderPipeline);
+
     }
 
-    public Window getMainWindow() {
+    public static Window getMainWindow() {
         return windows.get(mainWindowId);
     }
 
@@ -46,4 +47,5 @@ public class Engine {
             w.close();
         }
     }
+    //TODO: implement closing of single window by id
 }
