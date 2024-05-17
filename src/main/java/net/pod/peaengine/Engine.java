@@ -1,5 +1,6 @@
 package net.pod.peaengine;
 
+import net.pod.peaengine.event.EventListenerNotifier;
 import net.pod.peaengine.window.GameLoop;
 import net.pod.peaengine.window.Window;
 import org.lwjgl.glfw.GLFW;
@@ -23,6 +24,7 @@ public class Engine {
         if (!GLFW.glfwInit()) {
             throw new IllegalStateException("Unable to initialize GLFW");
         }
+        EventListenerNotifier.init();
         shouldRun = true;
     }
 
@@ -37,6 +39,14 @@ public class Engine {
     public static void launchGameLoop(Runnable updatePipeline, Runnable renderPipeline) {
         GameLoop.launch(updatePipeline, renderPipeline);
 
+    }
+
+    /**
+     * Should be called right at the end of program execution
+     */
+    public static void dispose() {
+        shouldRun = false;
+        EventListenerNotifier.dispose();
     }
 
     public static Window getMainWindow() {
