@@ -1,7 +1,7 @@
 package net.pod.peaengine;
 
 import net.pod.peaengine.event.EventListenerNotifier;
-import net.pod.peaengine.window.GameLoop;
+import net.pod.peaengine.gameloop.GameLoop;
 import net.pod.peaengine.window.Window;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;

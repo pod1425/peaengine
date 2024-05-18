@@ -1,7 +1,8 @@
 package net.pod.peaengine.playground.pod;
 
 import net.pod.peaengine.Engine;
-import net.pod.peaengine.window.GameLoop;
+import net.pod.peaengine.gameloop.FixedDeltaLoop;
+import net.pod.peaengine.gameloop.GameLoop;
 import net.pod.peaengine.window.Window;
 
 public class Playground {
@@ -9,6 +10,7 @@ public class Playground {
     public static void main(String[] args) throws InterruptedException {
         Engine.init();
         Engine.initializeNewMainWindow("Hello", 800, 600);
+        GameLoop.setLoopType(FixedDeltaLoop.class);
         Window mainWindow = Engine.getMainWindow();
         GameLoop.launch(
                 // update pipeline
