@@ -4,6 +4,7 @@ public abstract class GameLoopExecutor extends Thread {
     protected Runnable updatePipeline;
     protected Runnable renderPipeline;
     protected long currentTick;
+    protected long deltaTime;
 
     public GameLoopExecutor(Runnable updatePipeline, Runnable renderPipeline) {
         this.updatePipeline = updatePipeline;
@@ -16,5 +17,9 @@ public abstract class GameLoopExecutor extends Thread {
 
     public long getCurrentTick() {
         return currentTick;
+    }
+
+    public long getDeltaTime() {
+        return deltaTime;
     }
 }
