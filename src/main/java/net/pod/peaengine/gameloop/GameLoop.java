@@ -21,6 +21,19 @@ public class GameLoop {
     }
 
     /**
+     * Gets current running {@link GameLoopExecutor}
+     * @throws NullPointerException if executor is null
+     * @return current running {@link GameLoopExecutor}
+     */
+    public static GameLoopExecutor getExecutor() {
+        if (executor == null) {
+            throw new NullPointerException("There is no executor running!");
+        }
+
+        return executor;
+    }
+
+    /**
      * Creates an instance of {@link GameLoopExecutor} and runs it
      * @param updatePipeline
      * @param renderPipeline
