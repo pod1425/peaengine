@@ -100,6 +100,21 @@ public class Window implements AutoCloseable {
         GLFW.glfwSetWindowSize(window, width, height);
     }
 
+    public void setFullscreen() {
+        long monitor = GLFW.glfwGetPrimaryMonitor();
+        GLFWVidMode mode = GLFW.glfwGetVideoMode(monitor);
+        width = mode.width();
+        height = mode.height();
+
+        GLFW.glfwSetWindowMonitor(window, monitor, 0, 0,
+                width, height, mode.refreshRate());
+    }
+
+    public void setTitle(String newTitle) {
+        title = newTitle;
+        GLFW.glfwSetWindowTitle(window, title);
+    }
+
 
     @Override
     public void close() {
