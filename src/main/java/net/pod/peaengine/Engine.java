@@ -13,12 +13,10 @@ import java.util.Objects;
 public class Engine {
     public static int framerateCap;
     public static int tps = 20;
-    private static Map<Long, Window> windows; // no, not the OS
-    public static long mainWindowId;
+    private static long mainWindowId;
     public static boolean shouldRun;
 
     public static void init() {
-        windows = new HashMap<>();
         GLFWErrorCallback.createPrint(System.err).set();
 
         if (!GLFW.glfwInit()) {
@@ -29,8 +27,9 @@ public class Engine {
     }
 
     public static long initializeNewMainWindow(String title, int width, int height) {
-        Window window = new Window(title, width, height);
-        windows.put(window.getWindowId(), window);
+        Window window = Window.getInstance();
+        window.setTitle(title);
+        window.resize(width, height);
         mainWindowId = window.getWindowId();
         window.show();
         return mainWindowId;
@@ -49,22 +48,11 @@ public class Engine {
         EventListenerNotifier.dispose();
     }
 
-    public static Window getMainWindow() {
-        return windows.get(mainWindowId);
+    public static long getMainWindow() {
+        return mainWindowId;
     }
 
-    public static void closeAllWindows() {
-        for (Window w : windows.values()) {
-            w.close();
-        }
-    }
-
-    /**
-     * Closes a window by id
-     * @param id window id
-     * @throws NullPointerException if window with that {@code id} is {@code null}
-     */
-    public static void closeWindow(long id) {
-        Objects.requireNonNull(windows.get(id), "Window with ID: " + id + " does not exist!").close();
+    public static void closeWindow() {
+        Window.getInstance().close();
     }
 }
