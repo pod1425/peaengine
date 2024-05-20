@@ -15,11 +15,6 @@ public class DeltaTimeLoop extends GameLoopExecutor {
 
     @Override
     public void run() {
-        Window window = Window.getInstance();
-        window.setTitle(launchProps.getTitle());
-        window.resize(launchProps.getWidth(), launchProps.getHeight());
-        windowId = window.getWindowId();
-        window.show();
         initializeRenderingContext();
         GLFW.glfwSwapInterval(1); // v-sync
 

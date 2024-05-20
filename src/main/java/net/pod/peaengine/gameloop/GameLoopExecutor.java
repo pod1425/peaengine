@@ -20,6 +20,11 @@ public abstract class GameLoopExecutor extends Thread {
     }
 
     protected void initializeRenderingContext() {
+        Window window = Window.getInstance();
+        window.setTitle(launchProps.getTitle());
+        window.resize(launchProps.getWidth(), launchProps.getHeight());
+        windowId = window.getWindowId();
+        window.show();
         GLFW.glfwMakeContextCurrent(windowId);
         GL.createCapabilities();
         GL11.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
