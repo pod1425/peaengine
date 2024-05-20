@@ -18,6 +18,7 @@ public class Window implements AutoCloseable {
     private String title;
     private int width;
     private int height;
+    private int refreshRate;
 
     public Window(String title, int width, int height) {
         this.title = title;
@@ -98,6 +99,21 @@ public class Window implements AutoCloseable {
         width = newWidth;
         height = newHeight;
         GLFW.glfwSetWindowSize(window, width, height);
+    }
+
+    public void setFullscreen() {
+        long monitor = GLFW.glfwGetPrimaryMonitor();
+        GLFWVidMode mode = GLFW.glfwGetVideoMode(monitor);
+        width = mode.width();
+        height = mode.height();
+
+        GLFW.glfwSetWindowMonitor(window, monitor, 0, 0,
+                width, height, refreshRate);
+    }
+
+    public void setTitle(String newTitle) {
+        title = newTitle;
+        GLFW.glfwSetWindowTitle(window, title);
     }
 
 
