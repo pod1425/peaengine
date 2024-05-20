@@ -73,7 +73,7 @@ public class EventTest {
 
         // you can pass the object wherever you want
         pressButton(button);
-        // if you dont dispose it, the app doesnt finish since there are still some threads running
+        // if you dont shutdown it, the app doesnt finish since there are still some threads running
         // its done in Engine class tho
         EventListenerNotifier.dispose();
         /*
