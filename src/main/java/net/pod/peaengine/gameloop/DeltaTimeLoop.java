@@ -2,11 +2,11 @@ package net.pod.peaengine.gameloop;
 
 import net.pod.peaengine.Engine;
 
-public class VariableDeltaLoop extends GameLoopExecutor{
+public class DeltaTimeLoop extends GameLoopExecutor{
     private long lastTime;
     private long currentTime;
 
-    public VariableDeltaLoop(Runnable updatePipeline, Runnable renderPipeline) {
+    public DeltaTimeLoop(Runnable updatePipeline, Runnable renderPipeline) {
         super(updatePipeline, renderPipeline);
         lastTime = System.nanoTime();
     }

@@ -15,22 +15,21 @@ public class GameLoop {
      */
     public static void setLoopType(Class<? extends GameLoopExecutor> type) {
         if (executor != null) {
-            throw new IllegalStateException("Cant change type of running game loop");
+            throw new IllegalStateException("Can't change type of running game loop");
         }
         GameLoop.type = type;
     }
 
     /**
-     * Gets current running {@link GameLoopExecutor}
-     * @throws NullPointerException if executor is null
-     * @return current running {@link GameLoopExecutor}
+     * Gets current delta time
+     * @throws IllegalStateException if the loop is not running
+     * @return delta time
      */
-    public static GameLoopExecutor getExecutor() {
+    public static long getDeltaTime() {
         if (executor == null) {
-            throw new NullPointerException("There is no executor running!");
+            throw new IllegalStateException("Executor cannot be null");
         }
-
-        return executor;
+        return executor.getDeltaTime();
     }
 
     /**
