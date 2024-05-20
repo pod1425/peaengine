@@ -1,14 +1,18 @@
 package net.pod.peaengine.gameloop;
 
+import net.pod.peaengine.gameloop.old.FixedDeltaLoop;
+import net.pod.peaengine.window.WindowProps;
+import org.lwjgl.system.windows.WinBase;
+
 import java.lang.reflect.InvocationTargetException;
 
 public class GameLoop {
     private static GameLoopExecutor executor = null;
     // usage of reflection to allow anyone to create their implementation of game loop
-    private static Class<? extends GameLoopExecutor> type = FixedDeltaLoop.class;
+    private static Class<? extends GameLoopExecutor> type = DeltaTimeLoop.class;
 
     /**
-     * Changes the type of game loop implementation used ({@link FixedDeltaLoop} by default)
+     * Changes the type of game loop implementation used ({@link DeltaTimeLoop} by default)
      * for later creation and running of render and update pipelines
      * @param type of the game loop that will be used
      * @throws IllegalStateException if the loop is already running
@@ -38,7 +42,7 @@ public class GameLoop {
      * @param renderPipeline
      * @throws RuntimeException if creating an instance of game loop was failed
      */
-    public static void launch(Runnable updatePipeline, Runnable renderPipeline) {
+    public static void launch(WindowProps props, Runnable updatePipeline, Runnable renderPipeline) {
         try {
             executor = type
                     .getDeclaredConstructor(Runnable.class, Runnable.class)
@@ -46,8 +50,16 @@ public class GameLoop {
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
-        executor.start();
+        executor.startLoop(props);
         // maybe probably? gotta research
-        // executor.setDaemon(true);
+        //executor.setDaemon(true);
+    }
+
+    public static int getFps() {
+        return executor.getCurrentFps();
+    }
+
+    public static long getCurrentTick() {
+        return executor.getCurrentTick();
     }
 }

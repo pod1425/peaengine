@@ -1,17 +1,14 @@
 package net.pod.peaengine;
 
 import net.pod.peaengine.event.EventListenerNotifier;
-import net.pod.peaengine.gameloop.GameLoop;
 import net.pod.peaengine.window.Window;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-
 public class Engine {
-    public static int framerateCap;
+    // unused for now
+    public static int framerateCap = 60;
+    // unused for now
     public static int tps = 20;
     private static long mainWindowId;
     public static boolean shouldRun;
@@ -34,25 +31,17 @@ public class Engine {
         window.show();
         return mainWindowId;
     }
-    //TODO: implement creation of other windows
-    public static void launchGameLoop(Runnable updatePipeline, Runnable renderPipeline) {
-        GameLoop.launch(updatePipeline, renderPipeline);
-
-    }
 
     /**
      * Should be called right at the end of program execution
      */
-    public static void dispose() {
+    public static void shutdown() {
         shouldRun = false;
         EventListenerNotifier.dispose();
+        Window.getInstance().close();
     }
 
     public static long getMainWindow() {
         return mainWindowId;
-    }
-
-    public static void closeWindow() {
-        Window.getInstance().close();
     }
 }

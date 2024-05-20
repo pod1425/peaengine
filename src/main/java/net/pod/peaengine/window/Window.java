@@ -1,9 +1,6 @@
 package net.pod.peaengine.window;
 import net.pod.peaengine.Engine;
-import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.glfw.GLFWKeyCallback;
-import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
@@ -15,6 +12,7 @@ import java.nio.IntBuffer;
 public class Window implements AutoCloseable {
     private long window;
     private GLFWKeyCallback keyCallback;
+    private GLFWMouseButtonCallback mouseButtonCallback;
     private String title;
     private int width;
     private int height;
@@ -38,17 +36,10 @@ public class Window implements AutoCloseable {
         return window;
     }
 
-    // TODO: replace this placeholder when event system is in place
-    public void renderCalled() {
-        GLFW.glfwSwapBuffers(window);
-        GLFW.glfwPollEvents();
-    }
-
     /**
      * Initializes current window
      */
     private void init() {
-
         GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE); // hidden
         GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GLFW.GLFW_FALSE); // non-resizable (for now)
 
@@ -60,12 +51,19 @@ public class Window implements AutoCloseable {
         keyCallback = new GLFWKeyCallback() {
             @Override
             public void invoke(long window, int key, int scancode, int action, int mods) {
-                if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_RELEASE) {
-                    GLFW.glfwSetWindowShouldClose(window, true);
-                }
+                System.out.println("Key press!");
+                //TODO key press events and shit
             }
         };
         GLFW.glfwSetKeyCallback(window, keyCallback);
+        mouseButtonCallback = new GLFWMouseButtonCallback() {
+            @Override
+            public void invoke(long l, int i, int i1, int i2) {
+                System.out.println("Mouse event!");
+                // TODO mouse press events and shit
+            }
+        };
+        GLFW.glfwSetMouseButtonCallback(window, mouseButtonCallback);
 
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer pWidth = stack.mallocInt(1);
@@ -78,14 +76,6 @@ public class Window implements AutoCloseable {
                     (vidmode.height() - pHeight.get(0)) / 2
             );
         }
-
-        GLFW.glfwMakeContextCurrent(window);
-        GLFW.glfwSwapInterval(1); // v-sync
-
-        GL.createCapabilities();
-        GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
     }
 
     public void show() {
@@ -117,6 +107,7 @@ public class Window implements AutoCloseable {
     @Override
     public void close() {
         keyCallback.free();
+        mouseButtonCallback.free();
         GLFW.glfwDestroyWindow(window);
         GLFW.glfwTerminate();
         GLFW.glfwSetErrorCallback(null).free(); // oh, fuck off intellij
