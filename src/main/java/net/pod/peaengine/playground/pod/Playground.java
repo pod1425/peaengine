@@ -1,8 +1,8 @@
 package net.pod.peaengine.playground.pod;
 
 import net.pod.peaengine.Engine;
-import net.pod.peaengine.gameloop.FixedDeltaLoop;
 import net.pod.peaengine.gameloop.GameLoop;
+import net.pod.peaengine.gameloop.VariableDeltaLoop;
 import net.pod.peaengine.window.Window;
 
 public class Playground {
@@ -10,7 +10,7 @@ public class Playground {
     public static void main(String[] args) throws InterruptedException {
         Engine.init();
         Engine.initializeNewMainWindow("Hello", 800, 600);
-        GameLoop.setLoopType(FixedDeltaLoop.class);
+        GameLoop.setLoopType(VariableDeltaLoop.class);
         Window mainWindow = Engine.getMainWindow();
         GameLoop.launch(
                 // update pipeline
@@ -20,7 +20,7 @@ public class Playground {
                 // render pipeline
                 () -> {
 
-                    System.out.println("Render hehe");
+                    System.out.println("Render hehe, " + (1_000_000_000 / GameLoop.getExecutor().getDeltaTime()) + " FPS");
                     mainWindow.renderCalled();
                 }
         );
