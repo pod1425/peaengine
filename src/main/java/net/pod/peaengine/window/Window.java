@@ -18,7 +18,6 @@ public class Window implements AutoCloseable {
     private String title;
     private int width;
     private int height;
-    private int refreshRate;
 
     public Window(String title, int width, int height) {
         this.title = title;
@@ -108,7 +107,7 @@ public class Window implements AutoCloseable {
         height = mode.height();
 
         GLFW.glfwSetWindowMonitor(window, monitor, 0, 0,
-                width, height, refreshRate);
+                width, height, mode.refreshRate());
     }
 
     public void setTitle(String newTitle) {
