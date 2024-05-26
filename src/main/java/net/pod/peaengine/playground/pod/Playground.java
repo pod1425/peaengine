@@ -2,19 +2,26 @@ package net.pod.peaengine.playground.pod;
 
 import net.pod.peaengine.Engine;
 import net.pod.peaengine.gameloop.GameLoop;
+import net.pod.peaengine.render.texture.Sprite;
+import net.pod.peaengine.render.texture.SpriteRegistry;
 import net.pod.peaengine.window.WindowProps;
 import org.lwjgl.opengl.GL11;
 
-
 public class Playground {
 
-    public static float posX = -0.5f;
-    public static float posY = -0.5f;
+    public static float posX = -1;
+    public static float posY = -1;
+    private static Sprite test;
 
     public static void main(String[] args) throws InterruptedException {
         Engine.init();
+
         GameLoop.launch(
                 WindowProps.createNew().ofTitle("Hello").ofSize(800, 600),
+                // run before loops
+                () -> {
+                    test = SpriteRegistry.addSprite("test", new Sprite(Engine.textureLoader, "test.png"));
+                },
                 // update pipeline
                 () -> {
                     long tick = GameLoop.getCurrentTick();
@@ -34,7 +41,7 @@ public class Playground {
                     if (tick % 60 == 0) {
                         System.out.println("Render! " + GameLoop.getFps() + " FPS");
                     }
-                    drawSampleTriangle(posX, posY);
+                    test.draw(posX, posY, 0.0125f);
                 }
         );
         // wait 5 seconds before closing the game

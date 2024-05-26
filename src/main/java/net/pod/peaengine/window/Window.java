@@ -1,12 +1,9 @@
 package net.pod.peaengine.window;
-import net.pod.peaengine.Engine;
+
 import org.lwjgl.glfw.*;
-import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
-import java.io.Closeable;
 import java.nio.IntBuffer;
 
 public class Window implements AutoCloseable {

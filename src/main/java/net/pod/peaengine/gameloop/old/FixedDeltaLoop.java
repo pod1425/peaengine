@@ -18,8 +18,8 @@ public class FixedDeltaLoop extends GameLoopExecutor {
     private int frameCount;
     private long lastFrameCheck;
 
-    public FixedDeltaLoop(Runnable updatePipeline, Runnable renderPipeline) {
-        super(updatePipeline, renderPipeline);
+    public FixedDeltaLoop(Runnable runBefore, Runnable updatePipeline, Runnable renderPipeline) {
+        super(runBefore, updatePipeline, renderPipeline);
         lastTime = System.nanoTime();
         lastFrameTime = lastTime;
         fps = 0;
@@ -29,6 +29,9 @@ public class FixedDeltaLoop extends GameLoopExecutor {
     @Override
     public void run() {
         initializeRenderingContext();
+        Engine.loadResources();
+        runBefore.run();
+
         GLFW.glfwSwapInterval(0); // v-sync
         while (Engine.shouldRun) {
             currentTime = System.nanoTime();

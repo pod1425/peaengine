@@ -1,21 +1,23 @@
 package net.pod.peaengine.gameloop;
 
 import net.pod.peaengine.Engine;
-import net.pod.peaengine.window.Window;
 import org.lwjgl.glfw.GLFW;
 
 public class DeltaTimeLoop extends GameLoopExecutor {
     private long lastTime;
     private long currentTime;
 
-    public DeltaTimeLoop(Runnable updatePipeline, Runnable renderPipeline) {
-        super(updatePipeline, renderPipeline);
+    public DeltaTimeLoop(Runnable runBefore, Runnable updatePipeline, Runnable renderPipeline) {
+        super(runBefore, updatePipeline, renderPipeline);
         lastTime = System.nanoTime();
     }
 
     @Override
     public void run() {
         initializeRenderingContext();
+        Engine.loadResources();
+        runBefore.run();
+
         GLFW.glfwSwapInterval(1); // v-sync
 
         // remove the object
