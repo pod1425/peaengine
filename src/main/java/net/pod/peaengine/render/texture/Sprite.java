@@ -1,5 +1,6 @@
 package net.pod.peaengine.render.texture;
 
+import net.pod.peaengine.window.Window;
 import org.lwjgl.opengl.GL11;
 
 public class Sprite {
@@ -36,7 +37,7 @@ public class Sprite {
     }
 
     public void draw(float x, float y, float hScale, float vScale) {
-        float aspectRatio = 4f/3f;
+        float aspectRatio = Window.getInstance().getAspectRatio();
 
         // store the current model matrix
         GL11.glPushMatrix();

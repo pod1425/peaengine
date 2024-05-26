@@ -112,4 +112,8 @@ public class Window implements AutoCloseable {
         GLFW.glfwTerminate();
         GLFW.glfwSetErrorCallback(null).free(); // oh, fuck off intellij
     }
+
+    public float getAspectRatio() {
+        return aspectRatio;
+    }
 }
