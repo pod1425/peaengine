@@ -13,6 +13,7 @@ public class Window implements AutoCloseable {
     private String title;
     private int width;
     private int height;
+    private float aspectRatio;
     private static Window instance = null;
 
     public static Window getInstance() {
@@ -26,6 +27,7 @@ public class Window implements AutoCloseable {
         title = "Game";
         width = 800;
         height = 600;
+        aspectRatio = (float) width / height;
         init();
     }
 
@@ -82,6 +84,7 @@ public class Window implements AutoCloseable {
     public void resize(int newWidth, int newHeight) {
         width = newWidth;
         height = newHeight;
+        aspectRatio = (float) width / height;
         GLFW.glfwSetWindowSize(window, width, height);
     }
 
