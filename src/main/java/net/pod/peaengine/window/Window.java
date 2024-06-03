@@ -1,5 +1,7 @@
 package net.pod.peaengine.window;
 import net.pod.peaengine.input.keyboard.KeyManager;
+import net.pod.peaengine.input.mouse.Mouse;
+import net.pod.peaengine.input.mouse.MouseManager;
 import org.lwjgl.glfw.*;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
@@ -11,6 +13,7 @@ public class Window implements AutoCloseable {
     private GLFWKeyCallback keyCallback;
     private GLFWMouseButtonCallback mouseButtonCallback;
     private GLFWCursorPosCallback mousePosCallback;
+    private GLFWScrollCallback mouseScrollCallback;
     private String title;
     private int width;
     private int height;
@@ -51,7 +54,6 @@ public class Window implements AutoCloseable {
             public void invoke(long window, int key, int scancode, int action, int mods) {
                 System.out.println("Key press! " + key);
                 KeyManager.setKey(key, action == GLFW.GLFW_PRESS);
-                //TODO key press events and shit
             }
         };
         GLFW.glfwSetKeyCallback(window, keyCallback);
@@ -59,19 +61,33 @@ public class Window implements AutoCloseable {
             @Override
             public void invoke(long window, int button, int action, int mods) {
                 System.out.println("Mouse event! " + button);
-                // TODO mouse press events and shit
+                MouseManager.setBtn(button, action == GLFW.GLFW_PRESS);
             }
         };
         GLFW.glfwSetMouseButtonCallback(window, mouseButtonCallback);
         mousePosCallback = new GLFWCursorPosCallback() {
-            private double currentX = 0d;
-            private double currentY = 0d;
             @Override
             public void invoke(long window, double xPos, double yPos) {
-
+                //TODO: Mouse movement
             }
         };
         GLFW.glfwSetCursorPosCallback(window, mousePosCallback);
+        mouseScrollCallback = new GLFWScrollCallback() {
+            @Override
+            public void invoke(long window, double horScroll, double vertScroll) {
+                if (horScroll != 0) {
+                    boolean scrolledDown = horScroll < 0;
+                    KeyManager.setKey(scrolledDown ? Mouse.SCROLL_DOWN : Mouse.SCROLL_UP,
+                            scrolledDown);
+                }
+                if (vertScroll != 0) {
+                    boolean scrolledDown = vertScroll < 0;
+                    KeyManager.setKey(scrolledDown ? Mouse.SCROLL_DOWN : Mouse.SCROLL_UP,
+                            scrolledDown);
+                }
+            }
+        };
+        GLFW.glfwSetScrollCallback(window, mouseScrollCallback);
 
 
         try (MemoryStack stack = MemoryStack.stackPush()) {
@@ -117,6 +133,8 @@ public class Window implements AutoCloseable {
     public void close() {
         keyCallback.free();
         mouseButtonCallback.free();
+        mousePosCallback.free();
+        mouseScrollCallback.free();
         GLFW.glfwDestroyWindow(window);
         GLFW.glfwTerminate();
         GLFW.glfwSetErrorCallback(null).free(); // oh, fuck off intellij

@@ -9,4 +9,5 @@ public class Gamepad {
     public static int B = GLFW.GLFW_GAMEPAD_BUTTON_B;
     public static int LEFT_BUMPER = GLFW.GLFW_GAMEPAD_BUTTON_LEFT_BUMPER;
     public static int RIGHT_BUMPER = GLFW.GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER;
+    //TODO: Test and add remaining gamepad buttons
 }

@@ -19,10 +19,20 @@ public class MouseManager {
         }
     }
 
-    public static boolean getPressed(int btn) {
-        return mouseBtns.get(btn);
+    /**
+     * Gets if a mouse button is currently pressed
+     * @param button the mouse button to check, use Mouse class
+     * @return true if pressed, false otherwise
+     */
+    public static boolean getPressed(int button) {
+        return mouseBtns.get(button);
     }
 
+    /**
+     * Set a mouse button to pressed or released
+     * @param btn the button that has been pressed
+     * @param pressed true if pressed, false if released
+     */
     public static void setBtn(int btn, boolean pressed) {
         mouseBtns.put(btn, pressed);
     }
