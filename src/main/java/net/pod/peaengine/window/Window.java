@@ -1,18 +1,16 @@
 package net.pod.peaengine.window;
-import net.pod.peaengine.Engine;
+import net.pod.peaengine.input.keyboard.KeyManager;
 import org.lwjgl.glfw.*;
-import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
-import java.io.Closeable;
 import java.nio.IntBuffer;
 
 public class Window implements AutoCloseable {
     private long window;
     private GLFWKeyCallback keyCallback;
     private GLFWMouseButtonCallback mouseButtonCallback;
+    private GLFWCursorPosCallback mousePosCallback;
     private String title;
     private int width;
     private int height;
@@ -51,19 +49,30 @@ public class Window implements AutoCloseable {
         keyCallback = new GLFWKeyCallback() {
             @Override
             public void invoke(long window, int key, int scancode, int action, int mods) {
-                System.out.println("Key press!");
+                System.out.println("Key press! " + key);
+                KeyManager.setKey(key, action == GLFW.GLFW_PRESS);
                 //TODO key press events and shit
             }
         };
         GLFW.glfwSetKeyCallback(window, keyCallback);
-        mouseButtonCallback = new GLFWMouseButtonCallback() {
+        mouseButtonCallback =new GLFWMouseButtonCallback() {
             @Override
-            public void invoke(long l, int i, int i1, int i2) {
-                System.out.println("Mouse event!");
+            public void invoke(long window, int button, int action, int mods) {
+                System.out.println("Mouse event! " + button);
                 // TODO mouse press events and shit
             }
         };
         GLFW.glfwSetMouseButtonCallback(window, mouseButtonCallback);
+        mousePosCallback = new GLFWCursorPosCallback() {
+            private double currentX = 0d;
+            private double currentY = 0d;
+            @Override
+            public void invoke(long window, double xPos, double yPos) {
+
+            }
+        };
+        GLFW.glfwSetCursorPosCallback(window, mousePosCallback);
+
 
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer pWidth = stack.mallocInt(1);
