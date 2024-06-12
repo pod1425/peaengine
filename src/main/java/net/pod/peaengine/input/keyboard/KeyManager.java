@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class KeyManager {
     private static final HashMap<Integer, Boolean> keys = new HashMap<>();
 
-    static {
+    public static void init() {
         //Adding keys to hashmap
         Field[] fields = Keys.class.getDeclaredFields();
         Keys keyObj = new Keys();

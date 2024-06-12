@@ -18,6 +18,7 @@ public class Window implements AutoCloseable {
     private int width;
     private int height;
     private static Window instance = null;
+    private boolean cursorEnabled;
 
     public static Window getInstance() {
         if (instance == null) {
@@ -30,6 +31,7 @@ public class Window implements AutoCloseable {
         title = "Game";
         width = 800;
         height = 600;
+        cursorEnabled = true;
         init();
     }
 
@@ -48,27 +50,43 @@ public class Window implements AutoCloseable {
         if (window == MemoryUtil.NULL) {
             throw new RuntimeException("Failed to create the GLFW window");
         }
+        if (GLFW.glfwRawMouseMotionSupported()) {
+            GLFW.glfwSetInputMode(window, GLFW.GLFW_RAW_MOUSE_MOTION, GLFW.GLFW_TRUE);
+        }
 
         keyCallback = new GLFWKeyCallback() {
             @Override
             public void invoke(long window, int key, int scancode, int action, int mods) {
                 System.out.println("Key press! " + key);
-                KeyManager.setKey(key, action == GLFW.GLFW_PRESS);
+                if (action == GLFW.GLFW_PRESS) {
+                    KeyManager.setKey(key, true);
+                } else if (action == GLFW.GLFW_RELEASE) {
+                    KeyManager.setKey(key, false);
+                }
             }
         };
         GLFW.glfwSetKeyCallback(window, keyCallback);
-        mouseButtonCallback =new GLFWMouseButtonCallback() {
+        mouseButtonCallback = new GLFWMouseButtonCallback() {
             @Override
             public void invoke(long window, int button, int action, int mods) {
                 System.out.println("Mouse event! " + button);
-                MouseManager.setBtn(button, action == GLFW.GLFW_PRESS);
+                if (action == GLFW.GLFW_PRESS) {
+                    MouseManager.setBtn(button, true);
+                } else if (action == GLFW.GLFW_RELEASE) {
+                    MouseManager.setBtn(button, false);
+                }
             }
         };
         GLFW.glfwSetMouseButtonCallback(window, mouseButtonCallback);
         mousePosCallback = new GLFWCursorPosCallback() {
+            double prevX = 0;
+            double prevY = 0;
             @Override
             public void invoke(long window, double xPos, double yPos) {
-                //TODO: Mouse movement
+                MouseManager.deltaMovement.x = xPos - prevX;
+                MouseManager.deltaMovement.y = prevY - yPos;
+                prevY = yPos;
+                prevX = xPos;
             }
         };
         GLFW.glfwSetCursorPosCallback(window, mousePosCallback);
@@ -126,6 +144,18 @@ public class Window implements AutoCloseable {
     public void setTitle(String newTitle) {
         title = newTitle;
         GLFW.glfwSetWindowTitle(window, title);
+    }
+
+    public void toggleCursor() {
+        long window = getInstance().getWindowId();
+        if (cursorEnabled) {
+            GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
+            GLFW.glfwSetInputMode(window, GLFW.GLFW_RAW_MOUSE_MOTION, GLFW.GLFW_TRUE);
+            cursorEnabled = false;
+        } else {
+            GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
+            cursorEnabled = true;
+        }
     }
 
 

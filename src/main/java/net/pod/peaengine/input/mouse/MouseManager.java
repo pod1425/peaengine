@@ -1,12 +1,15 @@
 package net.pod.peaengine.input.mouse;
 
+import net.pod.peaengine.physics.Vector2D;
+
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
 public class MouseManager {
     private static final HashMap<Integer, Boolean> mouseBtns = new HashMap<>();
+    public static Vector2D deltaMovement = new Vector2D(0, 0);
 
-    static {
+    public static void init() {
         //Adding mouse buttons to hashmap
         Field[] fields = Mouse.class.getDeclaredFields();
         Mouse mouseObj = new Mouse();
