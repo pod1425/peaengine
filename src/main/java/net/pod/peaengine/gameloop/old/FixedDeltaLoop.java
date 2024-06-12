@@ -29,7 +29,6 @@ public class FixedDeltaLoop extends GameLoopExecutor {
     @Override
     public void run() {
         initializeRenderingContext();
-        Engine.loadResources();
         runBefore.run();
 
         GLFW.glfwSwapInterval(0); // v-sync

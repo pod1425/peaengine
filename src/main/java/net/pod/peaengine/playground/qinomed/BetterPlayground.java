@@ -2,21 +2,19 @@ package net.pod.peaengine.playground.qinomed;
 
 import net.pod.peaengine.Engine;
 import net.pod.peaengine.gameloop.GameLoop;
-import net.pod.peaengine.render.texture.Sprite;
-import net.pod.peaengine.render.texture.SpriteRegistry;
+import net.pod.peaengine.registry.builtin.Registries;
 import net.pod.peaengine.window.WindowProps;
 
 public class BetterPlayground {
     public static float posX = -0.5f;
     public static float posY = -0.5f;
-    private static Sprite test;
 
     public static void main(String[] args) throws InterruptedException {
         Engine.init();
         GameLoop.launch(
                 WindowProps.createNew().ofTitle("Hello").ofSize(800, 600),
                 () -> {
-                    test = SpriteRegistry.addSprite("test", new Sprite(Engine.textureLoader, "test.png"));
+                    Registries.textureRegistry.put("test","/assets/textures/test.png");
                 },
                 // update pipeline
                 () -> {
@@ -37,7 +35,7 @@ public class BetterPlayground {
                     if (tick % 60 == 0) {
                         System.out.println("Render! " + GameLoop.getFps() + " FPS");
                     }
-                    test.draw(posX, posY, 0.0125f);
+                    Registries.textureRegistry.get("test").draw(posX, posY, 0.0125f);
                 }
         );
         // wait 5 seconds before closing the game

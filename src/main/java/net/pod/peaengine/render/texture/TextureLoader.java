@@ -13,24 +13,22 @@ import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
-import java.util.HashMap;
 import java.util.Hashtable;
 
 public class TextureLoader {
-    private HashMap<String, Texture> textures = new HashMap<>();
-    private ColorModel glAlphaColorModel;
-    private ColorModel glColorModel;
-    private IntBuffer textureIDBuffer = BufferUtils.createIntBuffer(1);
+    private static final ColorModel GL_ALPHA_COLOR_MODEL;
+    private static final ColorModel GL_COLOR_MODEL;
+    private static IntBuffer textureIDBuffer = BufferUtils.createIntBuffer(1);
 
-    public TextureLoader() {
-        glAlphaColorModel = new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB),
+    static {
+        GL_ALPHA_COLOR_MODEL = new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB),
                 new int[]{8, 8, 8, 8},
                 true,
                 false,
                 ComponentColorModel.TRANSLUCENT,
                 DataBuffer.TYPE_BYTE);
 
-        glColorModel = new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB),
+        GL_COLOR_MODEL = new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB),
                 new int[]{8, 8, 8, 0},
                 false,
                 false,
@@ -38,44 +36,16 @@ public class TextureLoader {
                 DataBuffer.TYPE_BYTE);
     }
 
-    private int createTextureID() {
+    private static int createTextureID() {
         GL11.glGenTextures(textureIDBuffer);
         return textureIDBuffer.get(0);
     }
 
-    public void loadTexture(String filepath) {
-        Texture tex = getTexture(filepath,
-                GL11.GL_TEXTURE_2D, // target
-                GL11.GL_RGBA,     // dst pixel format
-                GL11.GL_NEAREST, // min filter (unused)
-                GL11.GL_NEAREST);
-
-        textures.put(filepath, tex);
-    }
-
-    public Texture getTexture(String filepath) {
-        Texture tex = textures.get(filepath);
-
-        if (tex != null) {
-            return tex;
-        }
-
-        tex = getTexture(filepath,
-                GL11.GL_TEXTURE_2D, // target
-                GL11.GL_RGBA,     // dst pixel format
-                GL11.GL_NEAREST, // min filter (unused)
-                GL11.GL_NEAREST);
-
-        textures.put(filepath, tex);
-
-        return tex;
-    }
-
-    public Texture getTexture(String resourceName,
-                              int target,
-                              int dstPixelFormat,
-                              int minFilter,
-                              int magFilter) {
+    public static Texture getTexture(String resourceName,
+                                     int target,
+                                     int dstPixelFormat,
+                                     int minFilter,
+                                     int magFilter) {
         int srcPixelFormat;
 
         // create the texture ID for this texture
@@ -132,7 +102,7 @@ public class TextureLoader {
         return ret;
     }
 
-    private ByteBuffer convertImageData(BufferedImage bufferedImage, Texture texture) {
+    private static ByteBuffer convertImageData(BufferedImage bufferedImage, Texture texture) {
         ByteBuffer imageBuffer;
         WritableRaster raster;
         BufferedImage texImage;
@@ -146,7 +116,7 @@ public class TextureLoader {
         // create raster
         boolean hasAlpha = bufferedImage.getColorModel().hasAlpha();
         raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, texWidth, texHeight, hasAlpha ? 4 : 3, null);
-        texImage = new BufferedImage(hasAlpha ? glAlphaColorModel : glColorModel, raster, false, new Hashtable());
+        texImage = new BufferedImage(hasAlpha ? GL_ALPHA_COLOR_MODEL : GL_COLOR_MODEL, raster, false, new Hashtable<>());
 
         // copy the source image into the produced image
         Graphics g = texImage.getGraphics();
@@ -165,15 +135,13 @@ public class TextureLoader {
         return imageBuffer;
     }
 
-    private BufferedImage loadImage(String filepath) throws IOException {
+    private static BufferedImage loadImage(String filepath) throws IOException {
         URL url = TextureLoader.class.getResource(filepath);
 
         if (url == null) {
             throw new IOException("Cannot find: " + filepath);
         }
 
-        BufferedImage bufferedImage = ImageIO.read(url);
-
-        return bufferedImage;
+        return ImageIO.read(url);
     }
 }

@@ -15,7 +15,6 @@ public class DeltaTimeLoop extends GameLoopExecutor {
     @Override
     public void run() {
         initializeRenderingContext();
-        Engine.loadResources();
         runBefore.run();
 
         GLFW.glfwSwapInterval(1); // v-sync
