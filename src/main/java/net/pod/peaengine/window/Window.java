@@ -1,12 +1,9 @@
 package net.pod.peaengine.window;
-import net.pod.peaengine.Engine;
+
 import org.lwjgl.glfw.*;
-import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
-import java.io.Closeable;
 import java.nio.IntBuffer;
 
 public class Window implements AutoCloseable {
@@ -16,6 +13,7 @@ public class Window implements AutoCloseable {
     private String title;
     private int width;
     private int height;
+    private float aspectRatio;
     private static Window instance = null;
 
     public static Window getInstance() {
@@ -29,6 +27,7 @@ public class Window implements AutoCloseable {
         title = "Game";
         width = 800;
         height = 600;
+        aspectRatio = (float) width / height;
         init();
     }
 
@@ -85,6 +84,7 @@ public class Window implements AutoCloseable {
     public void resize(int newWidth, int newHeight) {
         width = newWidth;
         height = newHeight;
+        aspectRatio = (float) width / height;
         GLFW.glfwSetWindowSize(window, width, height);
     }
 
@@ -111,5 +111,9 @@ public class Window implements AutoCloseable {
         GLFW.glfwDestroyWindow(window);
         GLFW.glfwTerminate();
         GLFW.glfwSetErrorCallback(null).free(); // oh, fuck off intellij
+    }
+
+    public float getAspectRatio() {
+        return aspectRatio;
     }
 }

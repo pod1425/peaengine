@@ -19,6 +19,7 @@ public class Engine {
         if (!GLFW.glfwInit()) {
             throw new IllegalStateException("Unable to initialize GLFW");
         }
+
         EventListenerNotifier.init();
         shouldRun = true;
     }

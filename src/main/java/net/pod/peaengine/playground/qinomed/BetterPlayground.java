@@ -1,11 +1,11 @@
-package net.pod.peaengine.playground.pod;
+package net.pod.peaengine.playground.qinomed;
 
 import net.pod.peaengine.Engine;
 import net.pod.peaengine.gameloop.GameLoop;
+import net.pod.peaengine.registry.builtin.Registries;
 import net.pod.peaengine.window.WindowProps;
-import org.lwjgl.opengl.GL11;
 
-public class Playground {
+public class BetterPlayground {
     public static float posX = -0.5f;
     public static float posY = -0.5f;
 
@@ -14,7 +14,7 @@ public class Playground {
         GameLoop.launch(
                 WindowProps.createNew().ofTitle("Hello").ofSize(800, 600),
                 () -> {
-                    System.out.println("I was run before the loops!");
+                    Registries.textureRegistry.put("test","/assets/textures/test.png");
                 },
                 // update pipeline
                 () -> {
@@ -35,23 +35,12 @@ public class Playground {
                     if (tick % 60 == 0) {
                         System.out.println("Render! " + GameLoop.getFps() + " FPS");
                     }
-                    drawSampleTriangle(posX, posY);
+                    Registries.textureRegistry.get("test").draw(posX, posY, 0.0125f);
                 }
         );
         // wait 5 seconds before closing the game
         Thread.sleep(5000);
         // shutdown engine first (stops the game loop)
         Engine.shutdown();
-    }
-
-    public static void drawSampleTriangle(float x, float y) {
-        GL11.glBegin(GL11.GL_TRIANGLES);
-        GL11.glColor3f(1.0f, 0.0f, 0.0f);
-        GL11.glVertex2f(x - 0.05f, y - 0.05f);
-        GL11.glColor3f(0.0f, 1.0f, 0.0f);
-        GL11.glVertex2f(x + 0.05f, y - 0.05f);
-        GL11.glColor3f(0.0f, 0.0f, 1.0f);
-        GL11.glVertex2f(x + 0.0f, y + 0.05f);
-        GL11.glEnd();
     }
 }
