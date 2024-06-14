@@ -1,5 +1,6 @@
 package net.pod.peaengine.gameloop;
 
+import net.pod.peaengine.input.mouse.MouseManager;
 import net.pod.peaengine.window.Window;
 import net.pod.peaengine.window.WindowProps;
 import org.lwjgl.glfw.GLFW;
@@ -28,6 +29,11 @@ public abstract class GameLoopExecutor extends Thread {
         GLFW.glfwMakeContextCurrent(windowId);
         GL.createCapabilities();
         GL11.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    }
+
+    protected void afterUpdate() {
+        MouseManager.deltaMovement.x = 0;
+        MouseManager.deltaMovement.y = 0;
     }
 
     protected void beforeRender() {

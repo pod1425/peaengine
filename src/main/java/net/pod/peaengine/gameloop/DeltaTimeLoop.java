@@ -26,8 +26,7 @@ public class DeltaTimeLoop extends GameLoopExecutor {
             deltaTime = currentTime - lastTime;
             currentTick++;
             updatePipeline.run();
-            MouseManager.deltaMovement.x = 0;
-            MouseManager.deltaMovement.y = 0;
+            afterUpdate();
             beforeRender();
             renderPipeline.run();
             afterRender();

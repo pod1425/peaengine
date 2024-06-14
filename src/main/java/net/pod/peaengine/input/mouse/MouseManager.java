@@ -7,10 +7,11 @@ import java.util.HashMap;
 
 public class MouseManager {
     private static final HashMap<Integer, Boolean> mouseBtns = new HashMap<>();
-    public static Vector2D deltaMovement = new Vector2D(0, 0);
+    public static Vector2D deltaMovement;
 
     public static void init() {
         //Adding mouse buttons to hashmap
+        deltaMovement = new Vector2D(0, 0);
         Field[] fields = Mouse.class.getDeclaredFields();
         Mouse mouseObj = new Mouse();
         for (Field field : fields) {
