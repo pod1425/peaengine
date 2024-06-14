@@ -1,5 +1,6 @@
 package net.pod.peaengine.gameloop;
 
+import net.pod.peaengine.input.mouse.MouseManager;
 import net.pod.peaengine.window.Window;
 import net.pod.peaengine.window.WindowProps;
 import org.lwjgl.glfw.GLFW;
@@ -36,6 +37,11 @@ public abstract class GameLoopExecutor extends Thread {
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
         GL11.glViewport(0, 0, launchProps.getWidth(), launchProps.getHeight());
+    }
+
+    protected void afterUpdate() {
+        MouseManager.deltaMovement.x = 0;
+        MouseManager.deltaMovement.y = 0;
     }
 
     protected void beforeRender() {

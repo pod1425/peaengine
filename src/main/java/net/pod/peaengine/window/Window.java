@@ -1,5 +1,8 @@
 package net.pod.peaengine.window;
 
+import net.pod.peaengine.input.keyboard.KeyManager;
+import net.pod.peaengine.input.mouse.Mouse;
+import net.pod.peaengine.input.mouse.MouseManager;
 import org.lwjgl.glfw.*;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
@@ -10,11 +13,14 @@ public class Window implements AutoCloseable {
     private long window;
     private GLFWKeyCallback keyCallback;
     private GLFWMouseButtonCallback mouseButtonCallback;
+    private GLFWCursorPosCallback mousePosCallback;
+    private GLFWScrollCallback mouseScrollCallback;
     private String title;
     private int width;
     private int height;
     private float aspectRatio;
     private static Window instance = null;
+    private boolean cursorEnabled;
 
     public static Window getInstance() {
         if (instance == null) {
@@ -27,6 +33,7 @@ public class Window implements AutoCloseable {
         title = "Game";
         width = 800;
         height = 600;
+        cursorEnabled = true;
         aspectRatio = (float) width / height;
         init();
     }
@@ -46,23 +53,63 @@ public class Window implements AutoCloseable {
         if (window == MemoryUtil.NULL) {
             throw new RuntimeException("Failed to create the GLFW window");
         }
+        if (GLFW.glfwRawMouseMotionSupported()) {
+            GLFW.glfwSetInputMode(window, GLFW.GLFW_RAW_MOUSE_MOTION, GLFW.GLFW_TRUE);
+        }
 
         keyCallback = new GLFWKeyCallback() {
             @Override
             public void invoke(long window, int key, int scancode, int action, int mods) {
-                System.out.println("Key press!");
-                //TODO key press events and shit
+                System.out.println("Key press! " + key);
+                if (action == GLFW.GLFW_PRESS) {
+                    KeyManager.setKey(key, true);
+                } else if (action == GLFW.GLFW_RELEASE) {
+                    KeyManager.setKey(key, false);
+                }
             }
         };
         GLFW.glfwSetKeyCallback(window, keyCallback);
         mouseButtonCallback = new GLFWMouseButtonCallback() {
             @Override
-            public void invoke(long l, int i, int i1, int i2) {
-                System.out.println("Mouse event!");
-                // TODO mouse press events and shit
+            public void invoke(long window, int button, int action, int mods) {
+                System.out.println("Mouse event! " + button);
+                if (action == GLFW.GLFW_PRESS) {
+                    MouseManager.setBtn(button, true);
+                } else if (action == GLFW.GLFW_RELEASE) {
+                    MouseManager.setBtn(button, false);
+                }
             }
         };
         GLFW.glfwSetMouseButtonCallback(window, mouseButtonCallback);
+        mousePosCallback = new GLFWCursorPosCallback() {
+            double prevX = 0;
+            double prevY = 0;
+            @Override
+            public void invoke(long window, double xPos, double yPos) {
+                MouseManager.deltaMovement.x = xPos - prevX;
+                MouseManager.deltaMovement.y = prevY - yPos;
+                prevY = yPos;
+                prevX = xPos;
+            }
+        };
+        GLFW.glfwSetCursorPosCallback(window, mousePosCallback);
+        mouseScrollCallback = new GLFWScrollCallback() {
+            @Override
+            public void invoke(long window, double horScroll, double vertScroll) {
+                if (horScroll != 0) {
+                    boolean scrolledDown = horScroll < 0;
+                    KeyManager.setKey(scrolledDown ? Mouse.SCROLL_DOWN : Mouse.SCROLL_UP,
+                            scrolledDown);
+                }
+                if (vertScroll != 0) {
+                    boolean scrolledDown = vertScroll < 0;
+                    KeyManager.setKey(scrolledDown ? Mouse.SCROLL_DOWN : Mouse.SCROLL_UP,
+                            scrolledDown);
+                }
+            }
+        };
+        GLFW.glfwSetScrollCallback(window, mouseScrollCallback);
+
 
         try (MemoryStack stack = MemoryStack.stackPush()) {
             IntBuffer pWidth = stack.mallocInt(1);
@@ -103,11 +150,25 @@ public class Window implements AutoCloseable {
         GLFW.glfwSetWindowTitle(window, title);
     }
 
+    public void toggleCursor() {
+        long window = getInstance().getWindowId();
+        if (cursorEnabled) {
+            GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
+            GLFW.glfwSetInputMode(window, GLFW.GLFW_RAW_MOUSE_MOTION, GLFW.GLFW_TRUE);
+            cursorEnabled = false;
+        } else {
+            GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
+            cursorEnabled = true;
+        }
+    }
+
 
     @Override
     public void close() {
         keyCallback.free();
         mouseButtonCallback.free();
+        mousePosCallback.free();
+        mouseScrollCallback.free();
         GLFW.glfwDestroyWindow(window);
         GLFW.glfwTerminate();
         GLFW.glfwSetErrorCallback(null).free(); // oh, fuck off intellij

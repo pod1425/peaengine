@@ -1,6 +1,8 @@
 package net.pod.peaengine;
 
 import net.pod.peaengine.event.EventListenerNotifier;
+import net.pod.peaengine.input.keyboard.KeyManager;
+import net.pod.peaengine.input.mouse.MouseManager;
 import net.pod.peaengine.window.Window;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -21,6 +23,8 @@ public class Engine {
         }
 
         EventListenerNotifier.init();
+        KeyManager.init();
+        MouseManager.init();
         shouldRun = true;
     }
 

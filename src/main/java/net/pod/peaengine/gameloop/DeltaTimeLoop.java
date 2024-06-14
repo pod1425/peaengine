@@ -1,6 +1,7 @@
 package net.pod.peaengine.gameloop;
 
 import net.pod.peaengine.Engine;
+import net.pod.peaengine.input.mouse.MouseManager;
 import org.lwjgl.glfw.GLFW;
 
 public class DeltaTimeLoop extends GameLoopExecutor {
@@ -27,6 +28,7 @@ public class DeltaTimeLoop extends GameLoopExecutor {
             deltaTime = currentTime - lastTime;
             currentTick++;
             updatePipeline.run();
+            afterUpdate();
             beforeRender();
             renderPipeline.run();
             afterRender();
