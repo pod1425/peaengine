@@ -1,4 +1,5 @@
 package net.pod.peaengine.window;
+
 import net.pod.peaengine.input.keyboard.KeyManager;
 import net.pod.peaengine.input.mouse.Mouse;
 import net.pod.peaengine.input.mouse.MouseManager;
@@ -17,6 +18,7 @@ public class Window implements AutoCloseable {
     private String title;
     private int width;
     private int height;
+    private float aspectRatio;
     private static Window instance = null;
     private boolean cursorEnabled;
 
@@ -32,6 +34,7 @@ public class Window implements AutoCloseable {
         width = 800;
         height = 600;
         cursorEnabled = true;
+        aspectRatio = (float) width / height;
         init();
     }
 
@@ -128,6 +131,7 @@ public class Window implements AutoCloseable {
     public void resize(int newWidth, int newHeight) {
         width = newWidth;
         height = newHeight;
+        aspectRatio = (float) width / height;
         GLFW.glfwSetWindowSize(window, width, height);
     }
 
@@ -168,5 +172,9 @@ public class Window implements AutoCloseable {
         GLFW.glfwDestroyWindow(window);
         GLFW.glfwTerminate();
         GLFW.glfwSetErrorCallback(null).free(); // oh, fuck off intellij
+    }
+
+    public float getAspectRatio() {
+        return aspectRatio;
     }
 }

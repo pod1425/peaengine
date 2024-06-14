@@ -21,6 +21,7 @@ public class Engine {
         if (!GLFW.glfwInit()) {
             throw new IllegalStateException("Unable to initialize GLFW");
         }
+
         EventListenerNotifier.init();
         KeyManager.init();
         MouseManager.init();

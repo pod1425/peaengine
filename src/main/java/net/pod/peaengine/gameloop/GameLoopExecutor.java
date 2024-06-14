@@ -6,15 +6,18 @@ import net.pod.peaengine.window.WindowProps;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
+
 public abstract class GameLoopExecutor extends Thread {
     protected Runnable updatePipeline;
     protected Runnable renderPipeline;
+    protected Runnable runBefore;
     protected long currentTick;
     protected long deltaTime;
     protected long windowId;
     protected WindowProps launchProps;
 
-    public GameLoopExecutor(Runnable updatePipeline, Runnable renderPipeline) {
+    public GameLoopExecutor(Runnable runBefore, Runnable updatePipeline, Runnable renderPipeline) {
+        this.runBefore = runBefore;
         this.updatePipeline = updatePipeline;
         this.renderPipeline = renderPipeline;
         currentTick = 0;
@@ -29,6 +32,11 @@ public abstract class GameLoopExecutor extends Thread {
         GLFW.glfwMakeContextCurrent(windowId);
         GL.createCapabilities();
         GL11.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+
+        GL11.glViewport(0, 0, launchProps.getWidth(), launchProps.getHeight());
     }
 
     protected void afterUpdate() {

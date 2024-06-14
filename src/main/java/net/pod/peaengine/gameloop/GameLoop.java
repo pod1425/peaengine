@@ -1,8 +1,6 @@
 package net.pod.peaengine.gameloop;
 
-import net.pod.peaengine.gameloop.old.FixedDeltaLoop;
 import net.pod.peaengine.window.WindowProps;
-import org.lwjgl.system.windows.WinBase;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -42,11 +40,11 @@ public class GameLoop {
      * @param renderPipeline
      * @throws RuntimeException if creating an instance of game loop was failed
      */
-    public static void launch(WindowProps props, Runnable updatePipeline, Runnable renderPipeline) {
+    public static void launch(WindowProps props, Runnable runBefore, Runnable updatePipeline, Runnable renderPipeline) {
         try {
             executor = type
-                    .getDeclaredConstructor(Runnable.class, Runnable.class)
-                    .newInstance(updatePipeline, renderPipeline);
+                    .getDeclaredConstructor(Runnable.class, Runnable.class, Runnable.class)
+                    .newInstance(runBefore, updatePipeline, renderPipeline);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException(e);
         }

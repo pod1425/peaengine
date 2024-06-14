@@ -8,14 +8,16 @@ public class DeltaTimeLoop extends GameLoopExecutor {
     private long lastTime;
     private long currentTime;
 
-    public DeltaTimeLoop(Runnable updatePipeline, Runnable renderPipeline) {
-        super(updatePipeline, renderPipeline);
+    public DeltaTimeLoop(Runnable runBefore, Runnable updatePipeline, Runnable renderPipeline) {
+        super(runBefore, updatePipeline, renderPipeline);
         lastTime = System.nanoTime();
     }
 
     @Override
     public void run() {
         initializeRenderingContext();
+        runBefore.run();
+
         GLFW.glfwSwapInterval(1); // v-sync
 
         // remove the object
