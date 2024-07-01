@@ -1,5 +1,6 @@
 package net.pod.peaengine.render.texture;
 
+import net.pod.peaengine.physics.Vector2D;
 import net.pod.peaengine.window.Window;
 import org.lwjgl.opengl.GL11;
 
@@ -20,6 +21,14 @@ public class Texture {
 
     public void bind() {
         GL11.glBindTexture(target, textureID);
+    }
+
+    public void draw(Vector2D pos) {
+        draw((float) pos.x, (float) pos.y, 1, 1);
+    }
+
+    public void draw(Vector2D pos, float scale) {
+        draw((float) pos.x, (float) pos.y, scale, scale);
     }
 
     public void draw(float x, float y) {
