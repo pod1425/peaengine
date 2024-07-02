@@ -34,6 +34,10 @@ public abstract class GameLoopExecutor extends Thread {
         GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
+        // enable transparency
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
         GL11.glViewport(0, 0, launchProps.getWidth(), launchProps.getHeight());
     }
 
