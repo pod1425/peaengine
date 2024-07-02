@@ -31,7 +31,7 @@ public class ControlsTest {
                     if (KeyManager.getPressed(Keys.S)) posY -= 0.1f;
                     if (KeyManager.getPressed(Keys.A)) posX -= 0.1f;
                     if (KeyManager.getPressed(Keys.D)) posX += 0.1f;
-                    if (KeyManager.getPressed(Keys.ENTER)) Window.getInstance().toggleCursor();
+                    if (KeyManager.getPressed(Keys.ENTER)) Window.getInstance(null).toggleCursor();
                     posX += ((float) MouseManager.deltaMovement.x /1000);
                     posY += ((float) MouseManager.deltaMovement.y /1000);
                 },

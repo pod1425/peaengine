@@ -4,6 +4,7 @@ import net.pod.peaengine.event.EventListenerNotifier;
 import net.pod.peaengine.input.keyboard.KeyManager;
 import net.pod.peaengine.input.mouse.MouseManager;
 import net.pod.peaengine.window.Window;
+import net.pod.peaengine.window.WindowProps;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 
@@ -28,10 +29,8 @@ public class Engine {
         shouldRun = true;
     }
 
-    public static long initializeNewMainWindow(String title, int width, int height) {
-        Window window = Window.getInstance();
-        window.setTitle(title);
-        window.resize(width, height);
+    public static long initializeNewMainWindow(WindowProps props) {
+        Window window = Window.getInstance(props);
         mainWindowId = window.getWindowId();
         window.show();
         return mainWindowId;
@@ -43,7 +42,7 @@ public class Engine {
     public static void shutdown() {
         shouldRun = false;
         EventListenerNotifier.dispose();
-        Window.getInstance().close();
+        Window.getInstance(null).close();
     }
 
     public static long getMainWindow() {

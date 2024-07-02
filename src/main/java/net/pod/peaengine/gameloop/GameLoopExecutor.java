@@ -24,9 +24,7 @@ public abstract class GameLoopExecutor extends Thread {
     }
 
     protected void initializeRenderingContext() {
-        Window window = Window.getInstance();
-        window.setTitle(launchProps.getTitle());
-        window.resize(launchProps.getWidth(), launchProps.getHeight());
+        Window window = Window.getInstance(launchProps);
         windowId = window.getWindowId();
         window.show();
         GLFW.glfwMakeContextCurrent(windowId);

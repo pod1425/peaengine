@@ -31,7 +31,7 @@ public class Texture {
     }
 
     public void draw(float x, float y, float hScale, float vScale) {
-        float aspectRatio = Window.getInstance().getAspectRatio();
+        float aspectRatio = Window.getInstance(null).getAspectRatio();
 
         // store the current model matrix
         GL11.glPushMatrix();

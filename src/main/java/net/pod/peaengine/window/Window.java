@@ -22,9 +22,14 @@ public class Window implements AutoCloseable {
     private static Window instance = null;
     private boolean cursorEnabled;
 
-    public static Window getInstance() {
+    public static Window getInstance(WindowProps props) {
         if (instance == null) {
             instance = new Window();
+        }
+        if (props != null) {
+            instance.title = props.getTitle();
+            instance.height = props.getHeight();
+            instance.width = props.getWidth();
         }
         return instance;
     }
@@ -151,7 +156,7 @@ public class Window implements AutoCloseable {
     }
 
     public void toggleCursor() {
-        long window = getInstance().getWindowId();
+        long window = getInstance(null).getWindowId();
         if (cursorEnabled) {
             GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
             GLFW.glfwSetInputMode(window, GLFW.GLFW_RAW_MOUSE_MOTION, GLFW.GLFW_TRUE);
