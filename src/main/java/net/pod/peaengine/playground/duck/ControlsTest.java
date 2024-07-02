@@ -20,9 +20,7 @@ public class ControlsTest {
         Engine.init();
         GameLoop.launch(
                 WindowProps.createNew().ofTitle("Hello").ofSize(800, 600),
-                () -> {
-                    // sorry the code wouldn't compile if I didn't add it
-                },
+                () -> {},
                 // update pipeline
                 () -> {
                     long tick = GameLoop.getCurrentTick();
@@ -33,7 +31,7 @@ public class ControlsTest {
                     if (KeyManager.getPressed(Keys.S)) posY -= 0.1f;
                     if (KeyManager.getPressed(Keys.A)) posX -= 0.1f;
                     if (KeyManager.getPressed(Keys.D)) posX += 0.1f;
-                    if (KeyManager.getPressed(Keys.ENTER)) Window.getInstance().toggleCursor();
+                    if (KeyManager.getPressed(Keys.ENTER)) Window.getInstance(null).toggleCursor();
                     posX += ((float) MouseManager.deltaMovement.x /1000);
                     posY += ((float) MouseManager.deltaMovement.y /1000);
                 },
