@@ -20,6 +20,7 @@ public class ControlsTest {
         Engine.init();
         GameLoop.launch(
                 WindowProps.createNew().ofTitle("Hello").ofSize(800, 600),
+                () -> {},
                 // update pipeline
                 () -> {
                     long tick = GameLoop.getCurrentTick();
