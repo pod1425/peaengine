@@ -1,9 +1,9 @@
-package net.pod.peaengine.physics.collision;
+package net.pod.peaengine.interract;
 
 import net.pod.peaengine.physics.Vector2D;
 
 // TODO MOOOORE DOCUMENTATOIN
-public class TriggerBox {
+public class TriggerBox implements Trigger {
     private Vector2D LUCorner; // left upper
     private Vector2D RUCorner; // right upper
     private Vector2D RLCorner; // right lower
@@ -24,7 +24,7 @@ public class TriggerBox {
         this.LLCorner = LLCorner;
     }
 
-    public boolean isPointInside(Vector2D point) {
+    public boolean triggered(Vector2D point) {
         return (point.x >= LUCorner.x && point.x <= RUCorner.x && point.y <= LUCorner.y && point.y >= LLCorner.y);
     }
 
