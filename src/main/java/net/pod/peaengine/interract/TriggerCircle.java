@@ -28,7 +28,7 @@ public class TriggerCircle implements Trigger {
     }
 
     @Override
-    public boolean triggered(Vector2D point) {
+    public boolean triggeredOn(Vector2D point) {
         return center.distance(point) < triggerRadius;
     }
 

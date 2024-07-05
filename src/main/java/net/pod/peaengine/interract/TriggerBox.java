@@ -24,7 +24,7 @@ public class TriggerBox implements Trigger {
         this.LLCorner = LLCorner;
     }
 
-    public boolean triggered(Vector2D point) {
+    public boolean triggeredOn(Vector2D point) {
         return (point.x >= LUCorner.x && point.x <= RUCorner.x && point.y <= LUCorner.y && point.y >= LLCorner.y);
     }
 

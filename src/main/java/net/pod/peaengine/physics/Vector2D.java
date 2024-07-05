@@ -21,7 +21,7 @@ public class Vector2D {
 
     /**
      * Moves a vector along X axis
-     * @param t move distance. Positive to move right, negative to move right
+     * @param t move distance. Positive to move right, negative to move left
      */
     public void moveX(double t) {
         x += t;

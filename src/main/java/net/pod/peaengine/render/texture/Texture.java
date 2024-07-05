@@ -31,15 +31,7 @@ public class Texture {
         draw((float) pos.x, (float) pos.y, scale, scale);
     }
 
-    public void draw(float x, float y) {
-        draw(x, y, 1, 1);
-    }
-
-    public void draw(float x, float y, float scale) {
-        draw(x, y, scale, scale);
-    }
-
-    public void draw(float x, float y, float hScale, float vScale) {
+    private void draw(float x, float y, float hScale, float vScale) {
         float aspectRatio = Window.getInstance(null).getAspectRatio();
 
         // store the current model matrix
