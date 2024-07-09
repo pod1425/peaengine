@@ -4,22 +4,33 @@ import net.pod.peaengine.Engine;
 import net.pod.peaengine.gameloop.GameLoop;
 import net.pod.peaengine.input.keyboard.KeyManager;
 import net.pod.peaengine.input.keyboard.Keys;
+import net.pod.peaengine.input.mouse.Mouse;
 import net.pod.peaengine.input.mouse.MouseManager;
+import net.pod.peaengine.registry.builtin.Registries;
+import net.pod.peaengine.render.cursor.Cursor;
 import net.pod.peaengine.window.Window;
 import net.pod.peaengine.window.WindowProps;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
+
+import javax.swing.*;
+import java.io.IOException;
 
 
 public class ControlsTest {
 
     public static float posX = -0.5f;
     public static float posY = -0.5f;
+    public static Cursor cursor;
 
     public static void main(String[] args) throws InterruptedException {
         Engine.init();
         GameLoop.launch(
                 WindowProps.createNew().ofTitle("Hello").ofSize(800, 600),
+                () -> {
+                    cursor = Registries.cursorRegistry.put("main", "main.png", 2, 2);
+
+                },
                 // update pipeline
                 () -> {
                     long tick = GameLoop.getCurrentTick();
@@ -31,6 +42,7 @@ public class ControlsTest {
                     if (KeyManager.getPressed(Keys.A)) posX -= 0.1f;
                     if (KeyManager.getPressed(Keys.D)) posX += 0.1f;
                     if (KeyManager.getPressed(Keys.ENTER)) Window.getInstance().toggleCursor();
+                    if (MouseManager.getPressed(Mouse.LEFT_CLICK)) Window.getInstance().setCursor(cursor);
                     posX += ((float) MouseManager.deltaMovement.x /1000);
                     posY += ((float) MouseManager.deltaMovement.y /1000);
                 },

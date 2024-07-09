@@ -3,10 +3,18 @@ package net.pod.peaengine.window;
 import net.pod.peaengine.input.keyboard.KeyManager;
 import net.pod.peaengine.input.mouse.Mouse;
 import net.pod.peaengine.input.mouse.MouseManager;
+import net.pod.peaengine.render.cursor.Cursor;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.*;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.net.URL;
+import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 public class Window implements AutoCloseable {
@@ -150,6 +158,9 @@ public class Window implements AutoCloseable {
         GLFW.glfwSetWindowTitle(window, title);
     }
 
+    /**
+     * Toggle the cursor between enabled and disabled. When disabled mouse movement will use raw mouse motion.
+     */
     public void toggleCursor() {
         long window = getInstance().getWindowId();
         if (cursorEnabled) {
@@ -162,6 +173,13 @@ public class Window implements AutoCloseable {
         }
     }
 
+    /**
+     * Sets the current cursor being displayed
+     * @param cursor Cursor stored in the cursorRegistry
+     */
+    public void setCursor(Cursor cursor) {
+        GLFW.glfwSetCursor(Window.getInstance().getWindowId(), cursor.getCursor());
+    }
 
     @Override
     public void close() {
