@@ -6,7 +6,7 @@ import net.pod.peaengine.interract.Trigger;
 
 import java.util.List;
 
-public class Hitbox implements EventListener<InterractionEventArgs> {
+public class Hitbox {
     private List<Trigger> triggers;
     private EventListener<InterractionEventArgs> hitHandler;
 
@@ -15,9 +15,7 @@ public class Hitbox implements EventListener<InterractionEventArgs> {
         this.hitHandler = hitHandler;
     }
 
-
-    @Override
-    public void handleEvent(InterractionEventArgs args) {
+    public void handleHit(InterractionEventArgs args) {
         Vector2D pos = args.getPosition();
         for (int i = 0; i < triggers.size(); i++) {
             if (triggers.get(i).triggeredOn(pos)) {
