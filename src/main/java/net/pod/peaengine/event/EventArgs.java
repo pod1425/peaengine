@@ -4,7 +4,7 @@ package net.pod.peaengine.event;
  * Represents event info
  */
 public class EventArgs {
-    private final Object sender;
+    protected final Object sender;
     private final Object argument;
 
     public EventArgs(Object sender, Object argument) {

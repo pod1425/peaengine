@@ -1,9 +1,12 @@
 package net.pod.peaengine.render.texture;
 
+import net.pod.peaengine.physics.Vector2D;
+import net.pod.peaengine.render.DrawArgs;
+import net.pod.peaengine.render.Drawable;
 import net.pod.peaengine.window.Window;
 import org.lwjgl.opengl.GL11;
 
-public class Texture {
+public class Texture implements Drawable {
     private int target;
     private int textureID;
     private int height;
@@ -22,16 +25,8 @@ public class Texture {
         GL11.glBindTexture(target, textureID);
     }
 
-    public void draw(float x, float y) {
-        draw(x, y, 1, 1);
-    }
-
-    public void draw(float x, float y, float scale) {
-        draw(x, y, scale, scale);
-    }
-
-    public void draw(float x, float y, float hScale, float vScale) {
-        float aspectRatio = Window.getInstance().getAspectRatio();
+    private void draw(float x, float y, float hScale, float vScale) {
+        float aspectRatio = Window.getInstance(null).getAspectRatio();
 
         // store the current model matrix
         GL11.glPushMatrix();
@@ -109,5 +104,10 @@ public class Texture {
         if (texHeight != 0) {
             widthRatio = ((float) width) / texWidth;
         }
+    }
+
+    @Override
+    public void draw(DrawArgs args) {
+        draw((float) args.getPos().x, (float) args.getPos().y, args.gethScale(), args.getvScale());
     }
 }
